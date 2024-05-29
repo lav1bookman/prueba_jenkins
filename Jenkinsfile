@@ -27,7 +27,7 @@ pipeline {
             }
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
+                    docker.withRegistry('https://regizstry.hub.docker.com', registryCredential) {
                         dockerImage.push('latest')
                     }
                 }
@@ -37,7 +37,14 @@ pipeline {
         stage('Deploying React.js container to Kubernetes') {
             steps {
                 script {
-                    kubernetesDeploy(configs: 'deployment.yaml', 'service.yaml')
+                    kubernetesDeploy(
+                        configs: 'deployment.yaml',
+                        enableConfigSubstitution: true
+                    )
+                    kubernetesDeploy(
+                         configs: 'service.yaml',
+                        enableConfigSubstitution: true
+                    )
                 }
             }
         }
