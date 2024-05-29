@@ -27,7 +27,7 @@ pipeline {
             }
             steps {
                 script {
-                    docker.withRegistry('https://regizstry.hub.docker.com', registryCredential) {
+                    docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
                         dockerImage.push('latest')
                     }
                 }
@@ -38,11 +38,13 @@ pipeline {
             steps {
                 script {
                     kubernetesDeploy(
+                        kubeconfigId: 'my-kubeconfig',
                         configs: 'deployment.yaml',
                         enableConfigSubstitution: true
                     )
                     kubernetesDeploy(
-                         configs: 'service.yaml',
+                        kubeconfigId: 'my-kubeconfig',
+                        configs: 'service.yaml',
                         enableConfigSubstitution: true
                     )
                 }
